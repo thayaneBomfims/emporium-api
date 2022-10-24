@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateTopicDto, UpdateTopicDto } from './dto/topic.dto';
 import { TopicEntity } from './entity/topic.entity';
 
 @Injectable()
@@ -22,14 +23,12 @@ export class TopicService {
         }
     }
 
-    async create(data: any) {
+    async create(data: CreateTopicDto) {
         return await this.topicRepository.save(this.topicRepository.create(data))
     }
 
-    async update(id: string, data: any) {
+    async update(id: string, data: UpdateTopicDto) {
         const topic = await this.findOne(id);
-
-        console.log('encontrado', topic)
 
         this.topicRepository.merge(topic, data);
         return await this.topicRepository.save(topic);
