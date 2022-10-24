@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode } from '@nestjs/common';
+import { CreateTopicDto, UpdateTopicDto } from './dto/topic.dto';
 import { TopicService } from './topic.service';
 
 @Controller('api/v1/topic')
@@ -12,7 +13,7 @@ export class TopicController {
     }
 
     @Post()
-    async create(@Body() body: any) {
+    async create(@Body() body: CreateTopicDto) {
         return await this.topicService.create(body)
     }
 
@@ -22,7 +23,7 @@ export class TopicController {
     }
 
     @Put(':id')
-    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: any) {
+    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UpdateTopicDto) {
         return await this.topicService.update(id, body);
     }
 
