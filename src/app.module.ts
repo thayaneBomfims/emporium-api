@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from './app/topic/topic.module';
 import { TrailModule } from './app/trail/trail.module';
+import { ContentModule } from './app/content/content.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { TrailModule } from './app/trail/trail.module';
       })
     }),
     TopicModule,
-    TrailModule
+    TrailModule,
+    ContentModule
   ],
 
   controllers: [],
