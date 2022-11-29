@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { TrailEntity } from "../../trail/entity/trail.entity"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'topics' })
 export class TopicEntity {
@@ -7,6 +8,9 @@ export class TopicEntity {
 
     @Column()
     name: string;
+
+    @OneToMany(() => TrailEntity, topic => TopicEntity)
+    trails: TrailEntity[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: string;
