@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TopicModule } from './app/topic/topic.module';
 import { TrailModule } from './app/trail/trail.module';
 import { ContentModule } from './app/content/content.module';
+import { UserModule } from './app/user/user.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { ContentModule } from './app/content/content.module';
     }),
     TopicModule,
     TrailModule,
-    ContentModule
+    ContentModule,
+    UserModule
   ],
 
   controllers: [],
