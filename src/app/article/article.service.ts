@@ -21,6 +21,20 @@ export class ArticleService {
         });
     }
 
+    async findAllByContentId(Contentid: any) {
+        return await this.articleRepository.find({
+            where: {
+                content: {
+                    id: Contentid
+                }
+            },
+            relations: {
+                content: true,
+                user: true
+            }
+        });
+    }
+
     async findOne(id: any) {
         try {
             return await this.articleRepository.findOne({

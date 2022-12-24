@@ -20,6 +20,19 @@ export class ContentService {
         });
     }
 
+    async findAllByTrailId(id: any) {
+        return await this.contentRepository.find({
+            where: {
+                trail: {
+                    id: id
+                }
+            },
+            relations: {
+                trail: true
+            }
+        });
+    }
+
     async findOne(id: any) {
         try {
             return await this.contentRepository.findOne({

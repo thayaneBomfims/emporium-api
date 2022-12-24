@@ -20,6 +20,19 @@ export class TrailService {
         });
     }
 
+    async findAllByTopicI(id: any) {
+        return await this.trailRepository.find({
+            where: {
+                topic: {
+                    id: id
+                }
+            },
+            relations: {
+                topic: true
+            }
+        });
+    }
+
     async findOne(id: any) {
         try {
             return await this.trailRepository.findOne({

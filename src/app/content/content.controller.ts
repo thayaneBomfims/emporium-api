@@ -14,7 +14,7 @@ export class ContentController {
 
     @Get(':id')
     async show(@Param('id', new ParseUUIDPipe()) id: string) {
-        return await this.contentService.findOne(id);
+        return await this.contentService.findAllByTrailId(id);
     }
 
     @Post()

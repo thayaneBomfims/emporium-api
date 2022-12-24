@@ -19,7 +19,7 @@ export class TrailController {
 
     @Get(':id')
     async show(@Param('id', new ParseUUIDPipe()) id: string) {
-        return await this.trailService.findOne(id);
+        return await this.trailService.findAllByTopicI(id);
     }
 
     @Put(':id')
