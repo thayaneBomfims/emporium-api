@@ -5,6 +5,7 @@ import { TopicModule } from './app/topic/topic.module';
 import { TrailModule } from './app/trail/trail.module';
 import { ContentModule } from './app/content/content.module';
 import { UserModule } from './app/user/user.module';
+import { ArticleModule } from './app/article/article.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { UserModule } from './app/user/user.module';
     TopicModule,
     TrailModule,
     ContentModule,
-    UserModule
+    UserModule,
+    ArticleModule
   ],
 
   controllers: [],

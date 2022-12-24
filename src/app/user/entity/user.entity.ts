@@ -1,4 +1,6 @@
 
+import { IsEmail, IsFQDN, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { ArticleEntity } from "src/app/article/entity/article.entity";
 import { TopicEntity } from "src/app/topic/entity/topic.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -11,18 +13,26 @@ export class UserEntity {
     name: string;
 
     @Column()
+    @IsEmail()
     email: string;
 
     @Column()
+    @IsString()
+    @MinLength(4)
+    @MaxLength(20)
+    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'Senha muito fraca' })
     password: string;
 
     @Column()
+    @IsFQDN()
     instagram: string;
 
     @Column()
+    @IsFQDN()
     facebook: string;
 
     @Column()
+    @IsFQDN()
     telegram: string;
 
     @Column()
@@ -31,6 +41,9 @@ export class UserEntity {
     @ManyToMany(() => TopicEntity)
     @JoinTable()
     topics: TopicEntity[]
+
+    @OneToMany(() => ArticleEntity, user => UserEntity)
+    articles: ArticleEntity[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: string;

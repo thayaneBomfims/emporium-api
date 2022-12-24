@@ -1,5 +1,6 @@
+import { ArticleEntity } from "src/app/article/entity/article.entity";
 import { TrailEntity } from "src/app/trail/entity/trail.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'contents' })
 export class ContentEntity {
@@ -11,6 +12,9 @@ export class ContentEntity {
 
     @ManyToOne(() => TrailEntity, contents => ContentEntity)
     trail: TrailEntity
+
+    @OneToMany(() => ArticleEntity, content => ContentEntity)
+    articles: ArticleEntity[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: string;
