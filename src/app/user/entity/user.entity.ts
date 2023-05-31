@@ -13,6 +13,9 @@ export class UserEntity {
     name: string;
 
     @Column()
+    public_name: string;
+
+    @Column()
     @IsEmail()
     email: string;
 

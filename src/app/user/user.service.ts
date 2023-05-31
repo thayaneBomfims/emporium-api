@@ -20,16 +20,12 @@ export class UserService {
     }
 
     async findOne(id: any) {
-        try {
-            return await this.userRepository.findOne({
-                where: { id: id },
-                relations: {
-                    topics: true
-                }
-            })
-        } catch (error) {
-            console.log('erro', error)
-        }
+        return await this.userRepository.findOne({
+            where: { id: id },
+            relations: {
+                topics: true
+            }
+        })
     }
 
     async create(data: any) {
@@ -45,7 +41,6 @@ export class UserService {
 
     async deleteById(id: string) {
         await this.findOne(id);
-
-        await this.userRepository.delete(id)
+        return await this.userRepository.delete(id)
     }
 }
