@@ -21,6 +21,7 @@
 - Finalizar e personalizar retornos das rotas, assim como status
 - Inserir autenticação com JWT e proteger as rotas necessárias
 - Realizar os testes unitários dos métodos do projeto
+- Criar arquivo swagger para documentar as rotas
 - Realizar teste integrado final com todas as rotas conversando
 
 Desenvolvedores: Thayane Bomfim
