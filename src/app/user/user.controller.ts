@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/user.dto';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -19,15 +20,8 @@ export class UserController {
     }
 
     @Post()
-    async create(@Body() body: any) {
-        try {
-            return await this.userService.create(body)
-        } catch (error) {
-            throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Erro interno, contate o administrador do sistema.',
-            }, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+    async create(@Body() body: CreateUserDto) {
+        return await this.userService.create(body)
     }
 
     @Get(':id')
@@ -54,16 +48,16 @@ export class UserController {
     @Put(':id')
     async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: any) {
         try {
-            const updated_user = await this.userService.update(id, body);
+            const updatedUser = await this.userService.update(id, body);
 
-            if (!updated_user) {
+            if (!updatedUser) {
                 throw new HttpException({
                     status: HttpStatus.NOT_FOUND,
                     error: 'Usuário não encontrado.',
                 }, HttpStatus.NOT_FOUND)
             }
 
-            return updated_user;
+            return updatedUser;
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,

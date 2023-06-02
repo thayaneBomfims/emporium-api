@@ -10,6 +10,9 @@ export class TrailEntity {
     @Column()
     name: string;
 
+    @Column()
+    description: string;
+
     @ManyToOne(() => TopicEntity, trails => TrailEntity)
     topic: TopicEntity
 

@@ -1,5 +1,5 @@
 
-import { IsEmail, IsFQDN, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsFQDN, IsString, IsUrl, Matches, MaxLength, MinLength } from "class-validator";
 import { ArticleEntity } from "src/app/article/entity/article.entity";
 import { TopicEntity } from "src/app/topic/entity/topic.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -23,19 +23,19 @@ export class UserEntity {
     @IsString()
     @MinLength(4)
     @MaxLength(20)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'Senha muito fraca' })
+    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'Senha muito fraca ' })
     password: string;
 
     @Column()
-    @IsFQDN()
+    @IsUrl()
     instagram: string;
 
     @Column()
-    @IsFQDN()
+    @IsUrl()
     facebook: string;
 
     @Column()
-    @IsFQDN()
+    @IsUrl()
     telegram: string;
 
     @Column()
