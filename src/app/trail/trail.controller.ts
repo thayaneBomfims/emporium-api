@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpSta
 import { CreateTrailDto, UpdateTrailDto } from './dto/trail.dto';
 import { TrailService } from './trail.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Trail')
 @Controller('api/v1/trail')
 export class TrailController {
 

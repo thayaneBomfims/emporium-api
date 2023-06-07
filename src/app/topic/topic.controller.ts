@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpSta
 import { CreateTopicDto, UpdateTopicDto } from './dto/topic.dto';
 import { TopicService } from './topic.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Topic')
 @Controller('api/v1/topic')
 export class TopicController {
 

@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpSta
 import { ContentService } from './content.service';
 import { CreateContentDto, UpdateContentDto } from './dto/content.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Content')
 @Controller('api/v1/content')
 export class ContentController {
 

@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode, Header, UseGuards } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Article')
 @Controller('api/v1/article')
 export class ArticleController {
     constructor(private readonly articleService: ArticleService) { }

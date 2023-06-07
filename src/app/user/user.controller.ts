@@ -3,7 +3,9 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { MessagesHelper } from 'src/helpers/messages.helper';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('api/v1/user')
 export class UserController {
 
