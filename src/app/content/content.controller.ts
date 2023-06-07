@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
 import { ContentService } from './content.service';
 import { CreateContentDto, UpdateContentDto } from './dto/content.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/content')
 export class ContentController {
@@ -18,16 +19,19 @@ export class ContentController {
     }
 
     @Post()
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() body: CreateContentDto) {
         return await this.contentService.create(body)
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UpdateContentDto) {
         return await this.contentService.update(id, body);
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
     async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
         return await this.contentService.deleteById(id);

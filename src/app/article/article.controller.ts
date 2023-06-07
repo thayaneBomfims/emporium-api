@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode, Header } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode, Header, UseGuards } from '@nestjs/common';
 import { ArticleService } from './article.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/article')
 export class ArticleController {
@@ -21,16 +22,19 @@ export class ArticleController {
     }
 
     @Post()
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() body: any) {
         return await this.articleService.create(body)
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: any) {
         return await this.articleService.update(id, body);
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
     async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
         return await this.articleService.deleteById(id);

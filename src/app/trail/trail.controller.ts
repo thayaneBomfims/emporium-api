@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
 import { CreateTrailDto, UpdateTrailDto } from './dto/trail.dto';
 import { TrailService } from './trail.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/v1/trail')
 export class TrailController {
@@ -13,6 +14,7 @@ export class TrailController {
     }
 
     @Post()
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body() body: CreateTrailDto) {
         return await this.trailService.create(body)
     }
@@ -23,11 +25,13 @@ export class TrailController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UpdateTrailDto) {
         return await this.trailService.update(id, body);
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
     async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
         return await this.trailService.deleteById(id);
