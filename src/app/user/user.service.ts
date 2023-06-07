@@ -1,6 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
@@ -23,13 +23,22 @@ export class UserService {
         });
     }
 
-    async findOne(id: any) {
-        return await this.userRepository.findOne({
-            where: { id: id },
-            relations: {
-                topics: true
-            }
-        })
+    async findOne(
+        conditions: FindManyOptions<UserEntity>
+    ) {
+        try {
+            return await this.userRepository.findOne({
+                where: conditions.where,
+                relations: {
+                    topics: true
+                }
+            })
+        }
+        catch (error) {
+            throw new NotFoundException(
+                error.message
+            )
+        }
     }
 
     async create(data: CreateUserDto): Promise<ReturnDto> {
@@ -40,7 +49,6 @@ export class UserService {
 
         if (!user) {
             const newUser = this.userRepository.create(data)
-            newUser.active = false
 
             const validationErrors = await validate(newUser);
 
@@ -54,7 +62,6 @@ export class UserService {
                 }, HttpStatus.BAD_REQUEST)
             }
 
-            newUser.password = bcrypt.hashSync(newUser.password, 8)
             return await this.userRepository.save(newUser)
                 .then(() => {
                     delete newUser.password
@@ -79,14 +86,18 @@ export class UserService {
     }
 
     async update(id: string, data: any) {
-        const user = await this.findOne(id);
+        const user = await this.findOne(
+            { where: { id: id } }
+        );
 
         this.userRepository.merge(user, data);
         return await this.userRepository.save(user);
     }
 
     async deleteById(id: string) {
-        await this.findOne(id);
+        await this.findOne(
+            { where: { id: id } }
+        );
         return await this.userRepository.delete(id)
     }
 }

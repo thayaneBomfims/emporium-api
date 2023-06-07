@@ -2,7 +2,10 @@
 import { IsEmail, IsFQDN, IsString, IsUrl, Matches, MaxLength, MinLength } from "class-validator";
 import { ArticleEntity } from "src/app/article/entity/article.entity";
 import { TopicEntity } from "src/app/topic/entity/topic.entity";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import * as bcrypt from 'bcrypt';
+import { RegExHelper } from '../../../helpers/regex.helper'
+import { MessagesHelper } from "src/helpers/messages.helper";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -23,7 +26,7 @@ export class UserEntity {
     @IsString()
     @MinLength(4)
     @MaxLength(20)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, { message: 'Senha muito fraca ' })
+    @Matches(RegExHelper.password, { message: MessagesHelper.PASSWORD_VALID })
     password: string;
 
     @Column()
@@ -38,7 +41,7 @@ export class UserEntity {
     @IsUrl()
     telegram: string;
 
-    @Column()
+    @Column({ default: false })
     active: boolean;
 
     @ManyToMany(() => TopicEntity)
@@ -56,4 +59,9 @@ export class UserEntity {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: string;
+
+    @BeforeInsert()
+    hashPassword() {
+        this.password = bcrypt.hashSync(this.password, 18);
+    }
 }

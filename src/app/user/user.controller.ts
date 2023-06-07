@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { MessagesHelper } from 'src/helpers/messages.helper';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -8,13 +10,14 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Get()
+    @UseGuards(AuthGuard('jwt'))
     async index() {
         try {
             return await this.userService.findAll();
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Erro interno, contate o administrador do sistema.',
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
             }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
@@ -25,9 +28,12 @@ export class UserController {
     }
 
     @Get(':id')
+    @UseGuards(AuthGuard('jwt'))
     async show(@Param('id', new ParseUUIDPipe()) id: string) {
         try {
-            const user = await this.userService.findOne(id);
+            const user = await this.userService.findOne(
+                { where: { id: id } }
+            );
 
             if (!user) {
                 throw new HttpException({
@@ -40,12 +46,13 @@ export class UserController {
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Erro interno, contate o administrador do sistema.',
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
             }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard('jwt'))
     async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: any) {
         try {
             const updatedUser = await this.userService.update(id, body);
@@ -61,12 +68,13 @@ export class UserController {
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Erro interno, contate o administrador do sistema.',
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
             }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
     async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
         try {
@@ -74,7 +82,7 @@ export class UserController {
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: 'Erro interno, contate o administrador do sistema.',
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
             }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
