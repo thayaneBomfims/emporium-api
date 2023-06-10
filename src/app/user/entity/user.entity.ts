@@ -1,10 +1,10 @@
 
 import { IsEmail, IsFQDN, IsString, IsUrl, Matches, MaxLength, MinLength } from "class-validator";
-import { ArticleEntity } from "src/app/article/entity/article.entity";
-import { TopicEntity } from "src/app/topic/entity/topic.entity";
+import { ArticleEntity } from "../../article/entity/article.entity";
+import { TopicEntity } from "../../topic/entity/topic.entity";
 import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { RegExHelper } from '../../../helpers/regex.helper'
-import { MessagesHelper } from "src/helpers/messages.helper";
+import { MessagesHelper } from "../../../helpers/messages.helper";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -58,4 +58,21 @@ export class UserEntity {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: string;
+
+    constructor(user?: Partial<UserEntity>) {
+        this.id = user?.id;
+        this.name = user?.name;
+        this.public_name = user?.public_name;
+        this.email = user?.email;
+        this.password = user?.password;
+        this.instagram = user?.instagram;
+        this.facebook = user?.facebook;
+        this.telegram = user?.telegram;
+        this.active = user?.active;
+        this.topics = user?.topics;
+        this.articles = user?.articles;
+        this.createdAt = user?.createdAt;
+        this.updatedAt = user?.updatedAt;
+        this.deletedAt = user?.deletedAt;
+    }
 }

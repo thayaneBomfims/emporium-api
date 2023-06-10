@@ -5,7 +5,7 @@ import { UserEntity } from './entity/user.entity';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { hashPassword } from '../utils/passwordHash';
 import { validationEntity } from '../utils/validation';
-import { MessagesHelper, UserMessagesHelper } from 'src/helpers/messages.helper';
+import { MessagesHelper, UserMessagesHelper } from '../../helpers/messages.helper';
 
 @Injectable()
 export class UserService {

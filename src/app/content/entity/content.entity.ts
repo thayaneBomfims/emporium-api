@@ -1,5 +1,5 @@
-import { ArticleEntity } from "src/app/article/entity/article.entity";
-import { TrailEntity } from "src/app/trail/entity/trail.entity";
+import { ArticleEntity } from "../../article/entity/article.entity";
+import { TrailEntity } from "../../trail/entity/trail.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'contents' })

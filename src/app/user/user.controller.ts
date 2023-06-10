@@ -4,7 +4,7 @@ import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { ReturnDto } from '../utils/return.dto';
-import { UserMessagesHelper } from 'src/helpers/messages.helper';
+import { UserMessagesHelper } from '../../helpers/messages.helper';
 
 @ApiTags('User')
 @Controller('api/v1/user')

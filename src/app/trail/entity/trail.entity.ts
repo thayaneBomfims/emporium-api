@@ -1,6 +1,6 @@
 import { TopicEntity } from "../../topic/entity/topic.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ContentEntity } from "src/app/content/entity/content.entity";
+import { ContentEntity } from "../../content/entity/content.entity";
 
 @Entity({ name: 'trails' })
 export class TrailEntity {
