@@ -1,9 +1,10 @@
 import { Controller, UseGuards, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { MessagesHelper } from 'src/helpers/messages.helper';
 import { ApiTags } from '@nestjs/swagger';
+import { ReturnDto } from '../utils/return.dto';
+import { UserMessagesHelper } from 'src/helpers/messages.helper';
 
 @ApiTags('User')
 @Controller('api/v1/user')
@@ -13,65 +14,47 @@ export class UserController {
 
     @Get()
     @UseGuards(AuthGuard('jwt'))
-    async index() {
-        try {
-            return await this.userService.findAll();
-        } catch (error) {
-            throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: MessagesHelper.INTERNAL_SERVER_ERROR,
-            }, HttpStatus.INTERNAL_SERVER_ERROR)
+    async index(): Promise<ReturnDto> {
+
+        return <ReturnDto>{
+            status: HttpStatus.OK,
+            records: await this.userService.findAll()
         }
+
     }
 
     @Post()
-    async create(@Body() body: CreateUserDto) {
-        return await this.userService.create(body)
+    async create(@Body() body: CreateUserDto): Promise<ReturnDto> {
+        return <ReturnDto>{
+            status: HttpStatus.CREATED,
+            message: UserMessagesHelper.SUCCESS_USER,
+            records: await this.userService.create(body)
+        }
+
     }
 
     @Get(':id')
     @UseGuards(AuthGuard('jwt'))
-    async show(@Param('id', new ParseUUIDPipe()) id: string) {
-        try {
-            const user = await this.userService.findOne(
-                { where: { id: id } }
-            );
+    async show(@Param('id', new ParseUUIDPipe()) id: string): Promise<ReturnDto> {
 
-            if (!user) {
-                throw new HttpException({
-                    status: HttpStatus.NOT_FOUND,
-                    error: 'Usuário não encontrado.',
-                }, HttpStatus.NOT_FOUND)
-            }
+        const user = await this.userService.findOne(
+            { where: { id: id } }
+        )
+        delete user.password
 
-            return user
-        } catch (error) {
-            throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: MessagesHelper.INTERNAL_SERVER_ERROR,
-            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        return <ReturnDto>{
+            status: HttpStatus.OK,
+            records: user
         }
     }
 
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
-    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: any) {
-        try {
-            const updatedUser = await this.userService.update(id, body);
-
-            if (!updatedUser) {
-                throw new HttpException({
-                    status: HttpStatus.NOT_FOUND,
-                    error: 'Usuário não encontrado.',
-                }, HttpStatus.NOT_FOUND)
-            }
-
-            return updatedUser;
-        } catch (error) {
-            throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: MessagesHelper.INTERNAL_SERVER_ERROR,
-            }, HttpStatus.INTERNAL_SERVER_ERROR)
+    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UpdateUserDto): Promise<ReturnDto> {
+        return <ReturnDto>{
+            status: HttpStatus.OK,
+            message: UserMessagesHelper.SUCCESS_UPDATE_USER,
+            records: await this.userService.update(id, body)
         }
     }
 
@@ -79,13 +62,6 @@ export class UserController {
     @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
     async destroy(@Param('id', new ParseUUIDPipe()) id: string) {
-        try {
-            return await this.userService.deleteById(id);
-        } catch (error) {
-            throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error: MessagesHelper.INTERNAL_SERVER_ERROR,
-            }, HttpStatus.INTERNAL_SERVER_ERROR)
-        }
+        return await this.userService.deleteById(id);
     }
 }

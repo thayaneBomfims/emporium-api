@@ -106,3 +106,4 @@ dist
 #caches
 .eslint.js
 .pettierrc
+yarn.lock

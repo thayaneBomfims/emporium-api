@@ -3,7 +3,6 @@ import { IsEmail, IsFQDN, IsString, IsUrl, Matches, MaxLength, MinLength } from 
 import { ArticleEntity } from "src/app/article/entity/article.entity";
 import { TopicEntity } from "src/app/topic/entity/topic.entity";
 import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import * as bcrypt from 'bcrypt';
 import { RegExHelper } from '../../../helpers/regex.helper'
 import { MessagesHelper } from "src/helpers/messages.helper";
 
@@ -59,9 +58,4 @@ export class UserEntity {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: string;
-
-    @BeforeInsert()
-    hashPassword() {
-        this.password = bcrypt.hashSync(this.password, 18);
-    }
 }

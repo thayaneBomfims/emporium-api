@@ -50,3 +50,29 @@ export class CreateUserDto {
      */
     facebook: string;
 }
+
+export class UpdateUserDto {
+    /**
+     * User telegram link or group
+     * @example https://web.telegram.org/k/#-455627078
+     */
+    telegram: string;
+
+    /**
+     * User public or artistic name
+     * @example Magic Doe
+     */
+    public_name: string;
+
+    /**
+     * User instagram link
+     * @example https://www.instagram.com/jonhDoe/
+     */
+    instagram: string;
+
+    /**
+     * User facebook link
+     * @example https://www.facebook.com/jonhDoe/
+     */
+    facebook: string;
+}

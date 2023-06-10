@@ -2,6 +2,6 @@ import { HttpStatus } from '@nestjs/common';
 
 export interface ReturnDto {
     status: HttpStatus;
-    message: string;
+    message?: string;
     records?: any;
 }
