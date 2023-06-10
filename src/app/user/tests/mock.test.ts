@@ -16,7 +16,7 @@ export const userEntityList: UserEntity[] = [
         active: true
     }),
     new UserEntity({
-        id: '1',
+        id: '2',
         name: 'fake-name2',
         public_name: 'public-fake-name2',
         email: 'fakeemail2@fake.com',
@@ -31,6 +31,11 @@ export const userEntityList: UserEntity[] = [
 export const getAllReturn: ReturnDto = {
     status: 200,
     records: userEntityList
+}
+
+export const getOneReturn: ReturnDto = {
+    status: 200,
+    records: userEntityList[0]
 }
 
 export const createBody: CreateUserDto = {
@@ -59,4 +64,22 @@ export const createUserReturn: ReturnDto = {
     status: 201,
     message: UserMessagesHelper.SUCCESS_USER,
     records: newUserEntity
+}
+
+export const updatedUserEntity: UserEntity = new UserEntity({
+    id: '2',
+    name: 'fake-name2',
+    public_name: 'public-fake-name2',
+    email: 'fakeemail2@fake.com',
+    password: 'Fake!passw0rd',
+    instagram: 'https://www.instagram.com/fake-name/',
+    facebook: 'https://www.facebook.com/fake-name/',
+    telegram: 'https://web.telegram.org/k/#-0000000',
+    active: true
+})
+
+export const updateReturn: ReturnDto = {
+    status: 200,
+    message: UserMessagesHelper.SUCCESS_UPDATE_USER,
+    records: updatedUserEntity
 }

@@ -15,9 +15,9 @@ describe('UserController', () => {
         useValue: {
           findAll: jest.fn().mockResolvedValue(mockUser.userEntityList),
           create: jest.fn().mockResolvedValue(mockUser.newUserEntity),
-          findOne: jest.fn(),
-          update: jest.fn(),
-          deleteById: jest.fn()
+          findOne: jest.fn().mockResolvedValue(mockUser.userEntityList[0]),
+          update: jest.fn().mockResolvedValue(mockUser.updatedUserEntity),
+          deleteById: jest.fn().mockResolvedValue(undefined)
         }
       }]
     }).compile();
@@ -65,6 +65,64 @@ describe('UserController', () => {
       jest.spyOn(userService, 'create').mockRejectedValueOnce(new Error());
 
       expect(userController.create(mockUser.createBody)).rejects.toThrowError()
+    })
+
+  })
+
+  describe('user show', () => {
+
+    it('test should return user entity successfuly', async () => {
+
+      const user = await userController.show('1');
+
+      expect(user).toEqual(mockUser.getOneReturn)
+      expect(userService.findOne).toHaveBeenCalledTimes(1)
+      expect(userService.findOne).toHaveBeenLastCalledWith({ where: { id: '1' } })
+    });
+
+    it('test should throw an exception when internal error server', () => {
+      jest.spyOn(userService, 'findOne').mockRejectedValueOnce(new Error());
+
+      expect(userController.show('1')).rejects.toThrowError()
+    })
+
+  })
+
+  describe('user update', () => {
+
+    it('test should update user successfuly', async () => {
+
+      const result = await userController.update('2', mockUser.userEntityList[1])
+
+      expect(result).toEqual(mockUser.updateReturn);
+      expect(userService.update).toHaveBeenCalledTimes(1);
+      expect(userService.update).toHaveBeenCalledWith('2', mockUser.userEntityList[1]);
+    })
+
+    it('test should throw an exception when internal error server', async () => {
+
+      jest.spyOn(userService, 'update').mockRejectedValueOnce(new Error());
+
+      expect(userController.update('2', mockUser.userEntityList[1])).rejects.toThrowError()
+    })
+
+  })
+
+  describe('user destroy', () => {
+
+    it('test should return undefined when user entity delete successfuly', async () => {
+
+      const user = await userController.destroy('1');
+
+      expect(user).toBeUndefined();
+      expect(userService.deleteById).toHaveBeenCalledTimes(1)
+      expect(userService.deleteById).toHaveBeenLastCalledWith('1')
+    });
+
+    it('test should throw an exception when internal error server', () => {
+      jest.spyOn(userService, 'deleteById').mockRejectedValueOnce(new Error());
+
+      expect(userController.destroy('1')).rejects.toThrowError()
     })
 
   })
