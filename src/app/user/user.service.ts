@@ -62,10 +62,10 @@ export class UserService {
         }
         catch (error) {
             if (error instanceof NotFoundException) {
-                throw new HttpException({
+                throw new NotFoundException({
                     status: HttpStatus.NOT_FOUND,
                     error: UserMessagesHelper.NOT_FOUND_USER,
-                }, HttpStatus.NOT_FOUND)
+                })
             }
             else {
                 throw new HttpException({
