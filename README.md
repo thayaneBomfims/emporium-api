@@ -6,7 +6,8 @@
 - Execute yarn ou npm install
 - Certifique-se de ter uma instância postgres rodando, seja pelo pg admin ou pelo docker (passos de criação da imagem no docker a seguir)
 - Certifique-se que os dados de conexão de seu banco estejam corretos em src/app.modules.ts
-- Rode o comando yarn typeorm migration:run quando seu banco estiver conectado para refletir as tabelas
+- Ou conecte-se a um banco na nuvem
+- Ao executar yarn start:dev as tabelas já serão refletidas no banco
 
 <h2>Gerar intância no docker </h2>
 <p align="right"><img alt="Docker" src="https://img.shields.io/badge/-Docker-46a2f1?style=flat-square&logo=docker&logoColor=white" /></p>
