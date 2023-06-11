@@ -28,7 +28,7 @@ export class ContentController {
         return <ReturnDto>{
             status: HttpStatus.OK,
             records: await this.contentService.findAllByTrailId(
-                { where: { id: id } }
+                { where: { trail: { id: id } } }
             )
         }
     }

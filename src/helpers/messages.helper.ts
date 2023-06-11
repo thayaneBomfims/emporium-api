@@ -35,3 +35,11 @@ export const TrailMessagesHelper = {
     NOT_FOUND_TRAIL: "Trilha não encontrada.",
 
 }
+
+export const TopicMessagesHelper = {
+
+    SUCCESS_TOPIC: "Tópico cadastrado com sucesso!",
+    SUCCESS_UPDATE_TOPIC: "Tópico atualizadao com sucesso!",
+    NOT_FOUND_TOPIC: "Tópico não encontrado.",
+
+}

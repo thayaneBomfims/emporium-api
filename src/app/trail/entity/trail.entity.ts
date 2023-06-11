@@ -31,4 +31,16 @@ export class TrailEntity {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: string;
+
+    constructor(trail?: Partial<TrailEntity>) {
+        this.id = trail?.id;
+        this.name = trail?.name;
+        this.description = trail?.description;
+        this.topic = trail?.topic;
+        this.contents = trail?.contents;
+        this.user = trail?.user;
+        this.createdAt = trail?.createdAt;
+        this.updatedAt = trail?.updatedAt;
+        this.deletedAt = trail?.deletedAt;
+    }
 }

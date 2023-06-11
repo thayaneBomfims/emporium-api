@@ -1,8 +1,16 @@
 import { IsNotEmpty } from "class-validator";
+import { UserEntity } from "../../user/entity/user.entity";
 
-export class CreateTopicDto {
+export class UpdateTopicDto {
     @IsNotEmpty()
     name: string
 }
 
-export class UpdateTopicDto extends CreateTopicDto { }
+export class CreateTopicDto extends UpdateTopicDto {
+
+    @IsNotEmpty()
+    scientific: boolean
+
+    @IsNotEmpty()
+    user: UserEntity
+}
