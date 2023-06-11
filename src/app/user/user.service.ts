@@ -4,8 +4,9 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { UserEntity } from './entity/user.entity';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { hashPassword } from '../utils/passwordHash';
-import { validationEntity } from '../utils/validation';
+import { validationEntity, validationUserByEmail } from '../utils/validation';
 import { MessagesHelper, UserMessagesHelper } from '../../helpers/messages.helper';
+import { ReqTokenParams } from '../utils/utils.dto';
 
 @Injectable()
 export class UserService {
@@ -108,10 +109,15 @@ export class UserService {
 
     }
 
-    async update(id: string, data: UpdateUserDto): Promise<UserEntity> {
+    async update(id: string, req: ReqTokenParams, data: UpdateUserDto): Promise<UserEntity> {
         const user = await this.findOne(
             { where: { id: id } }
         );
+
+        await validationUserByEmail(
+            user.email,
+            req.user.email
+        )
 
         this.userRepository.merge(user, data);
         try {

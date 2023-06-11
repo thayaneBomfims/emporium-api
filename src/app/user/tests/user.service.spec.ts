@@ -116,7 +116,7 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(mockUser.userEntityList[1])
       jest.spyOn(userRepository, 'save').mockResolvedValueOnce(mockUser.updatedUserEntity)
 
-      const result = await userService.update('2', mockUser.userEntityList[1]);
+      const result = await userService.update('2', mockUser.reqTokenParams, mockUser.userEntityList[1]);
 
       expect(result).toEqual(mockUser.updatedUserEntity)
       expect(userRepository.merge).toHaveBeenCalledTimes(1)
@@ -126,7 +126,7 @@ describe('UserService', () => {
     it('test should throw an exception when internal error server', () => {
       jest.spyOn(userRepository, 'save').mockRejectedValueOnce(new Error());
 
-      expect(userService.update('2', mockUser.userEntityList[1])).rejects.toThrowError()
+      expect(userService.update('2', mockUser.reqTokenParams, mockUser.userEntityList[1])).rejects.toThrowError()
     })
 
   })

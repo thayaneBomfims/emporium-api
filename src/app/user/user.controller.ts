@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, Post, Put, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Put, Req, Delete, Body, Param, ParseUUIDPipe, HttpStatus, HttpException, BadRequestException, HttpCode } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -50,11 +50,15 @@ export class UserController {
 
     @Put(':id')
     @UseGuards(AuthGuard('jwt'))
-    async update(@Param('id', new ParseUUIDPipe()) id: string, @Body() body: UpdateUserDto): Promise<ReturnDto> {
+    async update(
+        @Param('id', new ParseUUIDPipe()) id: string,
+        @Body() body: UpdateUserDto,
+        @Req() req: any
+    ): Promise<ReturnDto> {
         return <ReturnDto>{
             status: HttpStatus.OK,
             message: UserMessagesHelper.SUCCESS_UPDATE_USER,
-            records: await this.userService.update(id, body)
+            records: await this.userService.update(id, req, body)
         }
     }
 

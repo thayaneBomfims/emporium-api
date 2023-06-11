@@ -1,8 +1,8 @@
 import { IsNotEmpty, Matches } from "class-validator";
 import { RegExHelper } from '../../../helpers/regex.helper'
-import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateUserDto {
+
     /**
      * User private real name
      * @example Jon Doe
@@ -52,6 +52,7 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
+
     /**
      * User telegram link or group
      * @example https://web.telegram.org/k/#-455627078

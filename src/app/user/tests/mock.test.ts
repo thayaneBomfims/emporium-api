@@ -2,6 +2,7 @@ import { ReturnDto } from "src/app/utils/return.dto";
 import { UserEntity } from "../entity/user.entity";
 import { CreateUserDto } from "../dto/user.dto";
 import { UserMessagesHelper } from "../../../helpers/messages.helper";
+import { ReqTokenParams } from "../../utils/utils.dto";
 
 export const userEntityList: UserEntity[] = [
     new UserEntity({
@@ -77,6 +78,13 @@ export const updatedUserEntity: UserEntity = new UserEntity({
     telegram: 'https://web.telegram.org/k/#-0000000',
     active: true
 })
+
+export const reqTokenParams: ReqTokenParams = {
+    user: {
+        id: '2',
+        email: 'fakeemail2@fake.com'
+    }
+}
 
 export const updateReturn: ReturnDto = {
     status: 200,

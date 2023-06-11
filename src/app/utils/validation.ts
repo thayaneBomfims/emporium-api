@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { validate } from 'class-validator';
+import { MessagesHelper } from '../../helpers/messages.helper';
 import { EntitySchema } from 'typeorm';
 
 export const validationEntity = async (
@@ -18,4 +19,16 @@ export const validationEntity = async (
         }, HttpStatus.BAD_REQUEST)
     }
 
+}
+
+export const validationUserByEmail = async (
+    userEmail: string,
+    tokenEmail: string
+): Promise<void> => {
+    if (userEmail !== tokenEmail) {
+        throw new UnauthorizedException({
+            status: HttpStatus.UNAUTHORIZED,
+            error: MessagesHelper.USER_EDIT_ERROR,
+        })
+    }
 }

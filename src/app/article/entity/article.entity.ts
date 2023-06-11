@@ -30,4 +30,16 @@ export class ArticleEntity {
 
     @DeleteDateColumn({ name: 'deleted_at' })
     deletedAt: string;
+
+    constructor(article?: Partial<ArticleEntity>) {
+        this.id = article?.id;
+        this.title = article?.title;
+        this.subtitle = article?.subtitle;
+        this.material = article?.material;
+        this.content = article?.content;
+        this.user = article?.user;
+        this.createdAt = article?.createdAt;
+        this.updatedAt = article?.updatedAt;
+        this.deletedAt = article?.deletedAt;
+    }
 }

@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { ArticleEntity } from './entity/article.entity';
+import { MessagesHelper, ArticleMessagesHelper } from '../../helpers/messages.helper';
+import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
+import { validationEntity, validationUserByEmail } from '../utils/validation';
+import { ReqTokenParams } from '../utils/utils.dto';
 
 @Injectable()
 export class ArticleService {
@@ -12,57 +16,150 @@ export class ArticleService {
     ) { }
 
 
-    async findAll() {
-        return await this.articleRepository.find({
-            relations: {
-                content: true,
-                user: true
-            }
-        });
-    }
-
-    async findAllByContentId(Contentid: any) {
-        return await this.articleRepository.find({
-            where: {
-                content: {
-                    id: Contentid
-                }
-            },
-            relations: {
-                content: true,
-                user: true
-            }
-        });
-    }
-
-    async findOne(id: any) {
+    async findAll(): Promise<ArticleEntity[]> {
         try {
-            return await this.articleRepository.findOne({
-                where: { id: id },
+            return await this.articleRepository.find({
+                relations: {
+                    user: true,
+                    content: true
+                }
+            });
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async findOne(
+        conditions: FindManyOptions<ArticleEntity>
+    ): Promise<ArticleEntity> {
+        try {
+            const article = await this.articleRepository.findOne({
+                select: [
+                    'id',
+                    'title',
+                    'subtitle',
+                    'material',
+                    'updatedAt',
+                    'content',
+                    'user',
+                ],
+                where: conditions.where,
                 relations: {
                     content: true,
                     user: true
                 }
             })
+
+            if (!article) {
+                throw new NotFoundException()
+            }
+
+            return article;
+
         } catch (error) {
-            console.log('erro', error)
+            if (error instanceof NotFoundException) {
+                throw new NotFoundException({
+                    status: HttpStatus.NOT_FOUND,
+                    error: ArticleMessagesHelper.NOT_FOUND_ARTICLE,
+                })
+            }
+            else {
+                throw new HttpException({
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                    error: MessagesHelper.INTERNAL_SERVER_ERROR,
+                }, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
         }
     }
 
-    async create(data: any) {
-        await this.articleRepository.save(this.articleRepository.create(data))
+    async findAllByContent(
+        conditions: FindManyOptions<ArticleEntity>
+    ): Promise<ArticleEntity[]> {
+        try {
+            const article = await this.articleRepository.find({
+                select: [
+                    'id',
+                    'title',
+                    'subtitle',
+                    'material',
+                    'updatedAt',
+                    'content',
+                    'user',
+                ],
+                where: conditions.where,
+                relations: {
+                    user: true
+                }
+            })
+
+
+            return article;
+
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+
+        }
     }
 
-    async update(id: string, data: any) {
-        const trail = await this.findOne(id);
+    async create(data: CreateArticleDto): Promise<ArticleEntity> {
+        try {
+            const article = this.articleRepository.create(data)
 
-        this.articleRepository.merge(trail, data);
-        return await this.articleRepository.save(trail);
+            await validationEntity(article)
+            return await this.articleRepository.save(article)
+                .then(() => {
+                    return article
+                })
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
-    async deleteById(id: string) {
-        await this.findOne(id);
+    async update(id: string, req: ReqTokenParams, data: UpdateArticleDto): Promise<ArticleEntity> {
+        const article = await this.findOne(
+            { where: { id: id } }
+        );
 
-        await this.articleRepository.softDelete(id)
+        await validationUserByEmail(
+            article.user.email,
+            req.user.email
+        )
+
+        try {
+            this.articleRepository.merge(article, data);
+
+            return await this.articleRepository.save(article);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async deleteById(id: string, req: ReqTokenParams): Promise<any> {
+        await this.findOne(
+            { where: { id: id } }
+        );
+
+        try {
+            await this.articleRepository.softDelete(id)
+        }
+        catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
     }
 }

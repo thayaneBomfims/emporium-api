@@ -92,18 +92,18 @@ describe('UserController', () => {
 
     it('test should update user successfuly', async () => {
 
-      const result = await userController.update('2', mockUser.userEntityList[1])
+      const result = await userController.update('2', mockUser.userEntityList[1], mockUser.reqTokenParams)
 
       expect(result).toEqual(mockUser.updateReturn);
       expect(userService.update).toHaveBeenCalledTimes(1);
-      expect(userService.update).toHaveBeenCalledWith('2', mockUser.userEntityList[1]);
+      expect(userService.update).toHaveBeenCalledWith('2', mockUser.reqTokenParams, mockUser.userEntityList[1]);
     })
 
     it('test should throw an exception when internal error server', async () => {
 
       jest.spyOn(userService, 'update').mockRejectedValueOnce(new Error());
 
-      expect(userController.update('2', mockUser.userEntityList[1])).rejects.toThrowError()
+      expect(userController.update('2', mockUser.userEntityList[1], mockUser.reqTokenParams)).rejects.toThrowError()
     })
 
   })
