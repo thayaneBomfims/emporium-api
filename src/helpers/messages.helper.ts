@@ -27,3 +27,11 @@ export const ContentMessagesHelper = {
     NOT_FOUND_CONTENT: "Conteúdo não encontrado.",
 
 }
+
+export const TrailMessagesHelper = {
+
+    SUCCESS_TRAIL: "Trilha cadastrada com sucesso!",
+    SUCCESS_UPDATE_TRAIL: "Trilha atualizada com sucesso!",
+    NOT_FOUND_TRAIL: "Trilha não encontrada.",
+
+}

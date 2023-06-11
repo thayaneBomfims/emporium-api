@@ -106,18 +106,18 @@ export class ContentService {
     }
 
     async update(id: string, req: ReqTokenParams, data: any) {
-        const trail = await this.findOne(
+        const content = await this.findOne(
             { where: { id: id } }
         );
 
         await validationUserByEmail(
-            trail.user.email,
+            content.user.email,
             req.user.email
         )
 
         try {
-            this.contentRepository.merge(trail, data);
-            return await this.contentRepository.save(trail);
+            this.contentRepository.merge(content, data);
+            return await this.contentRepository.save(content);
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,

@@ -5,6 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { ReturnDto } from '../utils/return.dto';
 import { ContentMessagesHelper } from '../../helpers/messages.helper';
+import { ReqTokenParams } from '../utils/utils.dto';
 
 @ApiTags('Content')
 @Controller('api/v1/content')
@@ -47,7 +48,7 @@ export class ContentController {
     async update(
         @Param('id', new ParseUUIDPipe()) id: string,
         @Body() body: UpdateContentDto,
-        @Req() req: any
+        @Req() req: ReqTokenParams
     ): Promise<ReturnDto> {
         return <ReturnDto>{
             status: HttpStatus.OK,
@@ -59,7 +60,7 @@ export class ContentController {
     @Delete(':id')
     @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.NO_CONTENT)
-    async destroy(@Param('id', new ParseUUIDPipe()) id: string, @Req() req: any) {
+    async destroy(@Param('id', new ParseUUIDPipe()) id: string, @Req() req: ReqTokenParams) {
         return await this.contentService.deleteById(id, req);
     }
 }

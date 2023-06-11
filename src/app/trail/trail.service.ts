@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-// import { CreateTrailDto, UpdateTrailDto } from './dto/trail.dto';
+import { FindManyOptions, Repository } from 'typeorm';
 import { TrailEntity } from './entity/trail.entity';
+import { ReqTokenParams } from '../utils/utils.dto';
+import { MessagesHelper, TrailMessagesHelper } from '../../helpers/messages.helper';
+import { CreateTrailDto, UpdateTrailDto } from './dto/trail.dto';
+import { validationEntity, validationUserByEmail } from '../utils/validation';
 
 @Injectable()
 export class TrailService {
@@ -12,55 +15,129 @@ export class TrailService {
         private readonly trailRepository: Repository<TrailEntity>
     ) { }
 
-    async findAll() {
-        return await this.trailRepository.find({
-            relations: {
-                topic: true
-            }
-        });
-    }
-
-    async findAllByTopicI(id: any) {
-        return await this.trailRepository.find({
-            where: {
-                topic: {
-                    id: id
-                }
-            },
-            relations: {
-                topic: true
-            }
-        });
-    }
-
-    async findOne(id: any) {
+    async findAll(): Promise<TrailEntity[]> {
         try {
-            return await this.trailRepository.findOne({
-                where: { id: id },
+            return await this.trailRepository.find({
                 relations: {
-                    topic: true
+                    topic: true,
+                    user: true
                 }
-            })
+            });
         } catch (error) {
-            console.log('erro', error)
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
-    async create(data: any) {
-        await this.trailRepository.save(this.trailRepository.create(data))
+    async findAllByTopicId(
+        conditions: FindManyOptions<TrailEntity>
+    ): Promise<TrailEntity[]> {
+        try {
+            return await this.trailRepository.find({
+                select: [
+                    'id',
+                    'name',
+                    'description',
+                    'topic',
+                    'user',
+                ],
+                where: conditions.where,
+                relations: {
+                    user: true
+                }
+            });
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+
+        }
     }
 
-    async update(id: string, data: any) {
-        const trail = await this.findOne(id);
+    async findOne(
+        conditions: FindManyOptions<TrailEntity>
+    ): Promise<TrailEntity> {
+        try {
+            const trail = await this.trailRepository.findOne({
+                where: conditions.where,
+                relations: {
+                    topic: true,
+                    user: true
+                }
+            })
 
-        this.trailRepository.merge(trail, data);
-        return await this.trailRepository.save(trail);
+            if (!trail) {
+                throw new NotFoundException()
+            }
+            return trail;
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw new NotFoundException({
+                    status: HttpStatus.NOT_FOUND,
+                    error: TrailMessagesHelper.NOT_FOUND_TRAIL,
+                })
+            }
+            else {
+                throw new HttpException({
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                    error: MessagesHelper.INTERNAL_SERVER_ERROR,
+                }, HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
     }
 
-    async deleteById(id: string) {
-        await this.findOne(id);
+    async create(data: CreateTrailDto): Promise<TrailEntity> {
 
-        await this.trailRepository.softDelete(id)
+        try {
+            const trail = this.trailRepository.create(data)
+            await validationEntity(trail)
+
+            return await this.trailRepository.save(trail)
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async update(id: string, req: ReqTokenParams, data: UpdateTrailDto) {
+        const trail = await this.findOne(
+            { where: { id: id } }
+        );
+
+        await validationUserByEmail(
+            trail.user.email,
+            req.user.email
+        )
+
+        try {
+            this.trailRepository.merge(trail, data);
+            return await this.trailRepository.save(trail);
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async deleteById(id: string, req: ReqTokenParams,) {
+        await this.findOne(
+            { where: { id: id } }
+        );
+
+        try {
+            await this.trailRepository.softDelete(id)
+        } catch (error) {
+            throw new HttpException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                error: MessagesHelper.INTERNAL_SERVER_ERROR,
+            }, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 
 }
