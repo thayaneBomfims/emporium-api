@@ -18,11 +18,12 @@
 <h2>O que falta no projeto </h2>
 <p align="right"><img alt="NestJs" src="https://img.shields.io/badge/-NestJs-ea2845?style=flat-square&logo=nestjs&logoColor=white" /></p>
 
-- Finalizar catchs, throw errors e exceções nos métodos da service e controller
-- Finalizar e personalizar retornos das rotas, assim como status
-- Inserir autenticação com JWT e proteger as rotas necessárias
-- Realizar os testes unitários dos métodos do projeto
-- Criar arquivo swagger para documentar as rotas
-- Realizar teste integrado final com todas as rotas conversando
+- Finalizar os testes unitários dos módulos: article, content, topic, trail, auth
+- Atingir 100% no coverage após finalizar as implementações dos testes unitários
+
+Atual 55,37%:
+
+![image](https://github.com/thayaneBomfims/emporium-api/assets/63521435/dfafafd1-bab3-478a-a1fe-b4ff667ca99d)
+
 
 Desenvolvedores: Thayane Bomfim
