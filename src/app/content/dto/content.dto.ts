@@ -1,4 +1,6 @@
 import { IsNotEmpty } from "class-validator";
+import { TrailEntity } from "../../trail/entity/trail.entity";
+import { UserEntity } from "../../user/entity/user.entity";
 
 export class UpdateContentDto {
     @IsNotEmpty()
@@ -7,5 +9,8 @@ export class UpdateContentDto {
 
 export class CreateContentDto extends UpdateContentDto {
     @IsNotEmpty()
-    trail: string;
+    trail: TrailEntity;
+
+    @IsNotEmpty()
+    user: UserEntity;
 }

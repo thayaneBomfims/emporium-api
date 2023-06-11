@@ -113,9 +113,6 @@ export class ArticleService {
 
             await validationEntity(article)
             return await this.articleRepository.save(article)
-                .then(() => {
-                    return article
-                })
         } catch (error) {
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,

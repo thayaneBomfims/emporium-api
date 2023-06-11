@@ -19,3 +19,11 @@ export const ArticleMessagesHelper = {
     NOT_FOUND_ARTICLE: "Artigo não encontrado.",
 
 }
+
+export const ContentMessagesHelper = {
+
+    SUCCESS_CONTENT: "Conteúdo cadastrado com sucesso!",
+    SUCCESS_UPDATE_CONTENT: "Conteúdo atualizado com sucesso!",
+    NOT_FOUND_CONTENT: "Conteúdo não encontrado.",
+
+}

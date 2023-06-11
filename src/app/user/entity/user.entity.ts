@@ -5,6 +5,7 @@ import { TopicEntity } from "../../topic/entity/topic.entity";
 import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { RegExHelper } from '../../../helpers/regex.helper'
 import { MessagesHelper } from "../../../helpers/messages.helper";
+import { ContentEntity } from "../../content/entity/content.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -49,6 +50,9 @@ export class UserEntity {
 
     @OneToMany(() => ArticleEntity, user => UserEntity)
     articles: ArticleEntity[];
+
+    @OneToMany(() => ContentEntity, user => UserEntity)
+    contents: ContentEntity[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: string;
