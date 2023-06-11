@@ -21,15 +21,16 @@ describe('TrailService', () => {
             create: jest.fn(),
             save: jest.fn(),
             merge: jest.fn(),
-            delete: jest.fn()
-          }
-        }
-
+            delete: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     trailService = module.get<TrailService>(TrailService);
-    trailRepository = module.get<Repository<TrailEntity>>(getRepositoryToken(TrailEntity))
+    trailRepository = module.get<Repository<TrailEntity>>(
+      getRepositoryToken(TrailEntity),
+    );
   });
 
   it('should be defined', () => {

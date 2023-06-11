@@ -9,21 +9,23 @@ describe('ArticleController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ArticleController],
-      providers: [{
-        provide: ArticleService,
-        useValue: {
-          findAll: jest.fn(),
-          create: jest.fn(),
-          findOne: jest.fn(),
-          findAllByContent: jest.fn(),
-          update: jest.fn(),
-          deleteById: jest.fn()
-        }
-      }]
+      providers: [
+        {
+          provide: ArticleService,
+          useValue: {
+            findAll: jest.fn(),
+            create: jest.fn(),
+            findOne: jest.fn(),
+            findAllByContent: jest.fn(),
+            update: jest.fn(),
+            deleteById: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     articleController = module.get<ArticleController>(ArticleController);
-    articleService = module.get<ArticleService>(ArticleService)
+    articleService = module.get<ArticleService>(ArticleService);
   });
 
   it('should be defined', () => {

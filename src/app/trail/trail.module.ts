@@ -5,9 +5,9 @@ import { TrailService } from './trail.service';
 import { TrailController } from './trail.controller';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([TrailEntity])],
-    controllers: [TrailController],
-    providers: [TrailService],
-    exports: [TrailService]
+  imports: [TypeOrmModule.forFeature([TrailEntity])],
+  controllers: [TrailController],
+  providers: [TrailService],
+  exports: [TrailService],
 })
-export class TrailModule { }
+export class TrailModule {}

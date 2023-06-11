@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Put, Delete, Body, Req, Param, ParseUUIDPipe, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Req,
+  Param,
+  ParseUUIDPipe,
+  HttpStatus,
+  HttpCode,
+  UseGuards,
+} from '@nestjs/common';
 import { ContentService } from './content.service';
 import { CreateContentDto, UpdateContentDto } from './dto/content.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -10,57 +23,59 @@ import { ReqTokenParams } from '../utils/utils.dto';
 @ApiTags('Content')
 @Controller('api/v1/content')
 export class ContentController {
+  constructor(private readonly contentService: ContentService) {}
 
-    constructor(private readonly contentService: ContentService) { }
+  @Get()
+  async index(): Promise<ReturnDto> {
+    return <ReturnDto>{
+      status: HttpStatus.OK,
+      records: await this.contentService.findAll(),
+    };
+  }
 
-    @Get()
-    async index(): Promise<ReturnDto> {
+  @Get(':id')
+  async showByTrailId(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<ReturnDto> {
+    return <ReturnDto>{
+      status: HttpStatus.OK,
+      records: await this.contentService.findAllByTrailId({
+        where: { trail: { id: id } },
+      }),
+    };
+  }
 
-        return <ReturnDto>{
-            status: HttpStatus.OK,
-            records: await this.contentService.findAll()
-        }
-    }
+  @Post()
+  @UseGuards(AuthGuard('jwt'))
+  async create(@Body() body: CreateContentDto): Promise<ReturnDto> {
+    return <ReturnDto>{
+      status: HttpStatus.CREATED,
+      message: ContentMessagesHelper.SUCCESS_CONTENT,
+      records: await this.contentService.create(body),
+    };
+  }
 
-    @Get(':id')
-    async showByTrailId(@Param('id', new ParseUUIDPipe()) id: string): Promise<ReturnDto> {
+  @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
+  async update(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() body: UpdateContentDto,
+    @Req() req: ReqTokenParams,
+  ): Promise<ReturnDto> {
+    return <ReturnDto>{
+      status: HttpStatus.OK,
+      message: ContentMessagesHelper.SUCCESS_UPDATE_CONTENT,
+      records: await this.contentService.update(id, req, body),
+    };
+  }
 
-        return <ReturnDto>{
-            status: HttpStatus.OK,
-            records: await this.contentService.findAllByTrailId(
-                { where: { trail: { id: id } } }
-            )
-        }
-    }
-
-    @Post()
-    @UseGuards(AuthGuard('jwt'))
-    async create(@Body() body: CreateContentDto): Promise<ReturnDto> {
-        return <ReturnDto>{
-            status: HttpStatus.CREATED,
-            message: ContentMessagesHelper.SUCCESS_CONTENT,
-            records: await this.contentService.create(body)
-        }
-    }
-
-    @Put(':id')
-    @UseGuards(AuthGuard('jwt'))
-    async update(
-        @Param('id', new ParseUUIDPipe()) id: string,
-        @Body() body: UpdateContentDto,
-        @Req() req: ReqTokenParams
-    ): Promise<ReturnDto> {
-        return <ReturnDto>{
-            status: HttpStatus.OK,
-            message: ContentMessagesHelper.SUCCESS_UPDATE_CONTENT,
-            records: await this.contentService.update(id, req, body)
-        }
-    }
-
-    @Delete(':id')
-    @UseGuards(AuthGuard('jwt'))
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async destroy(@Param('id', new ParseUUIDPipe()) id: string, @Req() req: ReqTokenParams) {
-        return await this.contentService.deleteById(id, req);
-    }
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async destroy(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: ReqTokenParams,
+  ) {
+    return await this.contentService.deleteById(id, req);
+  }
 }

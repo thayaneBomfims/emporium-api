@@ -13,14 +13,14 @@ describe('AuthService', () => {
         {
           provide: JwtService,
           useValue: {
-            sign: jest.fn()
-          }
+            sign: jest.fn(),
+          },
         },
         {
           provide: UserService,
           useValue: {
-            findOne: jest.fn()
-          }
+            findOne: jest.fn(),
+          },
         },
       ],
     }).compile();

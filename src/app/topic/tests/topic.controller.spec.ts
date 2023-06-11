@@ -9,20 +9,22 @@ describe('TopicController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TopicController],
-      providers: [{
-        provide: TopicService,
-        useValue: {
-          findAll: jest.fn(),
-          create: jest.fn(),
-          findOne: jest.fn(),
-          update: jest.fn(),
-          deleteById: jest.fn()
-        }
-      }]
+      providers: [
+        {
+          provide: TopicService,
+          useValue: {
+            findAll: jest.fn(),
+            create: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            deleteById: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     topicController = module.get<TopicController>(TopicController);
-    topicService = module.get<TopicService>(TopicService)
+    topicService = module.get<TopicService>(TopicService);
   });
 
   it('should be defined', () => {

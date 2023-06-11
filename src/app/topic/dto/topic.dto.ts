@@ -1,16 +1,15 @@
-import { IsNotEmpty } from "class-validator";
-import { UserEntity } from "../../user/entity/user.entity";
+import { IsNotEmpty } from 'class-validator';
+import { UserEntity } from '../../user/entity/user.entity';
 
 export class UpdateTopicDto {
-    @IsNotEmpty()
-    name: string
+  @IsNotEmpty()
+  name: string;
 }
 
 export class CreateTopicDto extends UpdateTopicDto {
+  @IsNotEmpty()
+  scientific: boolean;
 
-    @IsNotEmpty()
-    scientific: boolean
-
-    @IsNotEmpty()
-    user: UserEntity
+  @IsNotEmpty()
+  user: UserEntity;
 }

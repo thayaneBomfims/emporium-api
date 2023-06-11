@@ -21,14 +21,16 @@ describe('ContentService', () => {
             create: jest.fn(),
             save: jest.fn(),
             merge: jest.fn(),
-            delete: jest.fn()
-          }
-        }
+            delete: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     contentService = module.get<ContentService>(ContentService);
-    contentRepository = module.get<Repository<ContentEntity>>(getRepositoryToken(ContentEntity))
+    contentRepository = module.get<Repository<ContentEntity>>(
+      getRepositoryToken(ContentEntity),
+    );
   });
 
   it('should be defined', () => {

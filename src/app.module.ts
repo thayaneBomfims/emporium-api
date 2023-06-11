@@ -14,26 +14,27 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: process.env.TYPEORM_CONNECTION,
-        host: configService.get('DB_HOST', 'localhost'),
-        port: Number(configService.get('DB_PORT', 5432)),
-        username: configService.get('DB_USERNAME', 'postgres'),
-        password: configService.get('DB_PASSWORD', '123'),
-        database: configService.get('DB_DATABASE', 'emporium'),
-        entities: [__dirname + '/**/*.entity{.js,.ts}'],
-        synchronize: true,
-      } as TypeOrmModuleOptions)
+      useFactory: (configService: ConfigService) =>
+        ({
+          type: process.env.TYPEORM_CONNECTION,
+          host: configService.get('DB_HOST', 'localhost'),
+          port: Number(configService.get('DB_PORT', 5432)),
+          username: configService.get('DB_USERNAME', 'postgres'),
+          password: configService.get('DB_PASSWORD', '123'),
+          database: configService.get('DB_DATABASE', 'emporium'),
+          entities: [__dirname + '/**/*.entity{.js,.ts}'],
+          synchronize: true,
+        } as TypeOrmModuleOptions),
     }),
     TopicModule,
     TrailModule,
     ContentModule,
     UserModule,
     ArticleModule,
-    AuthModule
+    AuthModule,
   ],
 
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

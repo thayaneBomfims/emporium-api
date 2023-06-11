@@ -16,26 +16,26 @@ describe('AuthController', () => {
           provide: AuthService,
           useValue: {
             login: jest.fn(),
-            validateUser: jest.fn()
-          }
+            validateUser: jest.fn(),
+          },
         },
         {
           provide: LocalStrategy,
           useValue: {
-            validate: jest.fn()
-          }
+            validate: jest.fn(),
+          },
         },
         {
           provide: JwtStrategy,
           useValue: {
-            validate: jest.fn()
-          }
-        }
-      ]
+            validate: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
-    articleService = module.get<AuthService>(AuthService)
+    articleService = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {

@@ -20,14 +20,16 @@ describe('TopicService', () => {
             create: jest.fn(),
             save: jest.fn(),
             merge: jest.fn(),
-            delete: jest.fn()
-          }
-        }
+            delete: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     topicService = module.get<TopicService>(TopicService);
-    topicRepository = module.get<Repository<TopicEntity>>(getRepositoryToken(TopicEntity))
+    topicRepository = module.get<Repository<TopicEntity>>(
+      getRepositoryToken(TopicEntity),
+    );
   });
 
   it('should be defined', () => {

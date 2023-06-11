@@ -9,21 +9,23 @@ describe('TrailController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TrailController],
-      providers: [{
-        provide: TrailService,
-        useValue: {
-          findAll: jest.fn(),
-          create: jest.fn(),
-          findOne: jest.fn(),
-          findAllByTopicId: jest.fn(),
-          update: jest.fn(),
-          deleteById: jest.fn()
-        }
-      }]
+      providers: [
+        {
+          provide: TrailService,
+          useValue: {
+            findAll: jest.fn(),
+            create: jest.fn(),
+            findOne: jest.fn(),
+            findAllByTopicId: jest.fn(),
+            update: jest.fn(),
+            deleteById: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     trailController = module.get<TrailController>(TrailController);
-    trailService = module.get<TrailService>(TrailService)
+    trailService = module.get<TrailService>(TrailService);
   });
 
   it('should be defined', () => {
