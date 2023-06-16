@@ -60,6 +60,9 @@ export class UserEntity {
   @Column({ default: false })
   active: boolean;
 
+  @Column()
+  description: string;
+
   @ManyToMany(() => TopicEntity)
   @JoinTable()
   topics: TopicEntity[];
@@ -89,6 +92,7 @@ export class UserEntity {
     this.facebook = user?.facebook;
     this.telegram = user?.telegram;
     this.active = user?.active;
+    this.description = user?.description;
     this.topics = user?.topics;
     this.articles = user?.articles;
     this.createdAt = user?.createdAt;

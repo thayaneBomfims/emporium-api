@@ -47,6 +47,7 @@ export const createBody: CreateUserDto = {
   instagram: 'https://www.instagram.com/fake-name/',
   facebook: 'https://www.facebook.com/fake-name/',
   telegram: 'https://web.telegram.org/k/#-0000000',
+  description: 'Description'
 };
 
 export const newUserEntity: UserEntity = new UserEntity({
@@ -59,6 +60,7 @@ export const newUserEntity: UserEntity = new UserEntity({
   instagram: 'https://www.instagram.com/fake-name/',
   facebook: 'https://www.facebook.com/fake-name/',
   telegram: 'https://web.telegram.org/k/#-0000000',
+  description: 'Description'
 });
 
 export const createUserReturn: ReturnDto = {

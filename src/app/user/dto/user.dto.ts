@@ -48,6 +48,13 @@ export class CreateUserDto {
    * @example https://www.facebook.com/jonhDoe/
    */
   facebook: string;
+
+  @IsNotEmpty()
+  /**
+   * User description
+   * @example Eu sou Jon e vou escrever artigos para ...
+   */
+  description: string;
 }
 
 export class UpdateUserDto {
