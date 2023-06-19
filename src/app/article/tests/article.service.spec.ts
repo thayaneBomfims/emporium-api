@@ -18,6 +18,7 @@ describe('ArticleService', () => {
             find: jest.fn(),
             findOne: jest.fn(),
             findAllByContent: jest.fn(),
+            findAllByUser: jest.fn(),
             create: jest.fn(),
             save: jest.fn(),
             merge: jest.fn(),

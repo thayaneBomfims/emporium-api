@@ -20,7 +20,7 @@ export class ArticleService {
   constructor(
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<ArticleEntity[]> {
     try {
@@ -106,6 +106,38 @@ export class ArticleService {
       });
 
       return article;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: MessagesHelper.INTERNAL_SERVER_ERROR,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findAllByUser(
+    conditions: FindManyOptions<ArticleEntity>,
+  ): Promise<ArticleEntity[]> {
+    try {
+      const articles = await this.articleRepository.find({
+        select: [
+          'id',
+          'title',
+          'subtitle',
+          'material',
+          'updatedAt',
+          'content',
+          'user',
+        ],
+        where: conditions.where,
+        relations: {
+          user: true,
+        },
+      });
+
+      return articles;
     } catch (error) {
       throw new HttpException(
         {

@@ -22,7 +22,7 @@ import { ArticleMessagesHelper } from '../../helpers/messages.helper';
 @ApiTags('Article')
 @Controller('api/v1/article')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(private readonly articleService: ArticleService) { }
 
   @Get()
   async index(): Promise<ReturnDto> {
@@ -49,6 +49,22 @@ export class ArticleController {
       records: await this.articleService.findAllByContent({
         where: {
           content: {
+            id: id,
+          },
+        },
+      }),
+    };
+  }
+
+  @Get('/user/:id')
+  async showByUserId(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<ReturnDto> {
+    return <ReturnDto>{
+      status: HttpStatus.OK,
+      records: await this.articleService.findAllByUser({
+        where: {
+          user: {
             id: id,
           },
         },

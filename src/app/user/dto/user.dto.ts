@@ -35,19 +35,19 @@ export class CreateUserDto {
    * User public or artistic name
    * @example Magic Doe
    */
-  public_name: string;
+  public_name?: string;
 
   /**
    * User instagram link
    * @example https://www.instagram.com/jonhDoe/
    */
-  instagram: string;
+  instagram?: string;
 
   /**
    * User facebook link
    * @example https://www.facebook.com/jonhDoe/
    */
-  facebook: string;
+  facebook?: string;
 
   @IsNotEmpty()
   /**
@@ -62,23 +62,35 @@ export class UpdateUserDto {
    * User telegram link or group
    * @example https://web.telegram.org/k/#-455627078
    */
-  telegram: string;
+  telegram?: string;
 
   /**
    * User public or artistic name
    * @example Magic Doe
    */
-  public_name: string;
+  public_name?: string;
 
   /**
    * User instagram link
    * @example https://www.instagram.com/jonhDoe/
    */
-  instagram: string;
+  instagram?: string;
 
   /**
    * User facebook link
    * @example https://www.facebook.com/jonhDoe/
    */
-  facebook: string;
+  facebook?: string;
+
+  /**
+   * Topic Id
+   * @example 117b820b-02ed-4aee-be11-0db7b2c01b51
+   */
+  topic?: string;
+
+  /**
+   * User active
+   * @example true
+   */
+  active?: boolean
 }

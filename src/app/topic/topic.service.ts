@@ -20,16 +20,13 @@ export class TopicService {
   constructor(
     @InjectRepository(TopicEntity)
     private readonly topicRepository: Repository<TopicEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<TopicEntity[]> {
     try {
-      return await this.topicRepository.find({
-        relations: {
-          user: true,
-        },
-      });
+      return await this.topicRepository.find();
     } catch (error) {
+      console.log('aaa', error)
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -46,9 +43,6 @@ export class TopicService {
     try {
       const topic = await this.topicRepository.findOne({
         where: conditions.where,
-        relations: {
-          user: true,
-        },
       });
 
       if (!topic) {
@@ -96,8 +90,6 @@ export class TopicService {
     data: UpdateTopicDto,
   ): Promise<TopicEntity> {
     const topic = await this.findOne({ where: { id: id } });
-
-    await validationUserByEmail(topic.user.email, req.user.email);
 
     try {
       this.topicRepository.merge(topic, data);

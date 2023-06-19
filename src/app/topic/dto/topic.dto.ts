@@ -9,7 +9,4 @@ export class UpdateTopicDto {
 export class CreateTopicDto extends UpdateTopicDto {
   @IsNotEmpty()
   scientific: boolean;
-
-  @IsNotEmpty()
-  user: UserEntity;
 }

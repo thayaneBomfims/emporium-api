@@ -16,12 +16,15 @@ import {
 } from '../../helpers/messages.helper';
 import { ReqTokenParams } from '../utils/utils.dto';
 
+import { TopicService } from "../topic/topic.service"
+
 @Injectable()
 export class UserService {
   constructor(
+    private readonly topicService: TopicService,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<UserEntity[]> {
     try {
@@ -54,6 +57,7 @@ export class UserService {
           'facebook',
           'telegram',
           'active',
+          'topics'
         ],
         where: conditions.where,
         relations: {
@@ -127,8 +131,10 @@ export class UserService {
     data: UpdateUserDto,
   ): Promise<UserEntity> {
     const user = await this.findOne({ where: { id: id } });
-
     await validationUserByEmail(user.email, req.user.email);
+
+    const topic = await this.topicService.findOne({ where: { id: data.topic } })
+    user.topics.push(topic)
 
     this.userRepository.merge(user, data);
     try {

@@ -17,6 +17,7 @@ describe('ArticleController', () => {
             create: jest.fn(),
             findOne: jest.fn(),
             findAllByContent: jest.fn(),
+            findAllByUser: jest.fn(),
             update: jest.fn(),
             deleteById: jest.fn(),
           },

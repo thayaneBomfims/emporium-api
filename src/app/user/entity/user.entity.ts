@@ -1,5 +1,6 @@
 import {
   IsEmail,
+  IsOptional,
   IsString,
   IsUrl,
   Matches,
@@ -31,7 +32,8 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
+  @IsOptional()
   public_name: string;
 
   @Column()
@@ -45,12 +47,14 @@ export class UserEntity {
   @Matches(RegExHelper.password, { message: MessagesHelper.PASSWORD_VALID })
   password: string;
 
-  @Column()
   @IsUrl()
+  @Column({ nullable: true })
+  @IsOptional()
   instagram: string;
 
-  @Column()
   @IsUrl()
+  @Column({ nullable: true })
+  @IsOptional()
   facebook: string;
 
   @Column()

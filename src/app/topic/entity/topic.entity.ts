@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -25,9 +26,6 @@ export class TopicEntity {
   @OneToMany(() => TrailEntity, (topic) => TopicEntity)
   trails: TrailEntity[];
 
-  @ManyToOne(() => UserEntity, (topics) => TopicEntity)
-  user: UserEntity;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
 
@@ -42,7 +40,6 @@ export class TopicEntity {
     this.name = topic?.name;
     this.scientific = topic?.scientific;
     this.trails = topic?.trails;
-    this.user = topic?.user;
     this.createdAt = topic?.createdAt;
     this.updatedAt = topic?.updatedAt;
     this.deletedAt = topic?.deletedAt;
