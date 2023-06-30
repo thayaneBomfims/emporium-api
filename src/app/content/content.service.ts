@@ -20,7 +20,7 @@ export class ContentService {
   constructor(
     @InjectRepository(ContentEntity)
     private readonly contentRepository: Repository<ContentEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<ContentEntity[]> {
     try {
@@ -49,6 +49,7 @@ export class ContentService {
         select: ['id', 'name', 'trail', 'articles', 'user'],
         where: conditions.where,
         relations: {
+          trail: true,
           user: true,
         },
       });

@@ -20,7 +20,7 @@ export class TrailService {
   constructor(
     @InjectRepository(TrailEntity)
     private readonly trailRepository: Repository<TrailEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<TrailEntity[]> {
     try {
@@ -50,6 +50,7 @@ export class TrailService {
         where: conditions.where,
         relations: {
           user: true,
+          topic: true,
         },
       });
     } catch (error) {

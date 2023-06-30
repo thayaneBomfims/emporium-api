@@ -28,6 +28,10 @@ export const validationUserByEmail = async (
   userEmail: string,
   tokenEmail: string,
 ): Promise<void> => {
+
+  if (tokenEmail == process.env.ADMIN_EMAIL) {
+    return
+  }
   if (userEmail !== tokenEmail) {
     throw new UnauthorizedException({
       status: HttpStatus.UNAUTHORIZED,
