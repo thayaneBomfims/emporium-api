@@ -14,6 +14,7 @@ import {
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 import { validationEntity, validationUserByEmail } from '../utils/validation';
 import { ReqTokenParams } from '../utils/utils.dto';
+import * as AWS from 'aws-sdk';
 
 @Injectable()
 export class ArticleService {
@@ -21,6 +22,12 @@ export class ArticleService {
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
   ) { }
+
+  AWS_S3_BUCKET = process.env.BUCKET_NAME;
+  s3 = new AWS.S3({
+    accessKeyId: process.env.BUCKET_KEY,
+    secretAccessKey: process.env.BUCKET_SECRET,
+  });
 
   async findAll(): Promise<ArticleEntity[]> {
     try {
@@ -149,11 +156,35 @@ export class ArticleService {
     }
   }
 
-  async create(data: CreateArticleDto): Promise<ArticleEntity> {
+  async create(
+    file: Express.Multer.File,
+    data: CreateArticleDto
+  ): Promise<ArticleEntity> {
+
+    console.log(file);
+    const { originalname } = file;
+
+    const params = {
+      Bucket: this.AWS_S3_BUCKET,
+      Key: String(originalname),
+      Body: file.buffer,
+      ACL: 'public-read',
+      ContentType: file.mimetype,
+      ContentDisposition: 'inline',
+      CreateBucketConfiguration: {
+        LocationConstraint: 'ap-south-1',
+      },
+    };
+
     try {
+      let s3Response = await this.s3.upload(params).promise();
+
+      data.material = String(s3Response.Location)
+
       const article = this.articleRepository.create(data);
 
       await validationEntity(article);
+
       return await this.articleRepository.save(article);
     } catch (error) {
       throw new HttpException(

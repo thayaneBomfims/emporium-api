@@ -11,7 +11,10 @@ import {
   HttpCode,
   Req,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ArticleService } from './article.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
@@ -74,11 +77,15 @@ export class ArticleController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async create(@Body() body: CreateArticleDto): Promise<ReturnDto> {
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: CreateArticleDto
+  ): Promise<ReturnDto> {
     return <ReturnDto>{
       status: HttpStatus.CREATED,
       message: ArticleMessagesHelper.SUCCESS_ARTICLE,
-      records: await this.articleService.create(body),
+      records: await this.articleService.create(file, body),
     };
   }
 

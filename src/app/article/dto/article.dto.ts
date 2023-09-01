@@ -17,10 +17,9 @@ export class CreateArticleDto {
   subtitle: string;
 
   /**
-   * Body in html of the material
-   * @example <html></html>
+   * Link in aws bucket of the material
+   * @example https://bucket.s3.amazonaws.com/article.json
    */
-  @IsNotEmpty()
   material: string;
 
   /**
@@ -51,8 +50,8 @@ export class UpdateArticleDto {
   subtitle: string;
 
   /**
-   * Body in html of the material
-   * @example <html></html>
+   * Link in aws bucket of the material
+   * @example https://bucket.s3.amazonaws.com/article.json
    */
   material: string;
 }
