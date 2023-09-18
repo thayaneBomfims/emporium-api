@@ -91,7 +91,9 @@ export class ArticleController {
 
   @Put(':id')
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('file'))
   async update(
+    @UploadedFile() file: Express.Multer.File,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() body: UpdateArticleDto,
     @Req() req: any,
@@ -99,7 +101,7 @@ export class ArticleController {
     return <ReturnDto>{
       status: HttpStatus.OK,
       message: ArticleMessagesHelper.SUCCESS_UPDATE_ARTICLE,
-      records: await this.articleService.update(id, req, body),
+      records: await this.articleService.update(id, req, file, body),
     };
   }
 

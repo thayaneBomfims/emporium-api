@@ -160,8 +160,6 @@ export class ArticleService {
     file: Express.Multer.File,
     data: CreateArticleDto
   ): Promise<ArticleEntity> {
-
-    console.log(file);
     const { originalname } = file;
 
     const params = {
@@ -200,13 +198,42 @@ export class ArticleService {
   async update(
     id: string,
     req: ReqTokenParams,
+    file: Express.Multer.File,
     data: UpdateArticleDto,
   ): Promise<ArticleEntity> {
     const article = await this.findOne({ where: { id: id } });
 
+    const { originalname } = file;
+
+    const params = {
+      Bucket: this.AWS_S3_BUCKET,
+      Key: String(originalname),
+      Body: file.buffer,
+      ACL: 'public-read',
+      ContentType: file.mimetype,
+      ContentDisposition: 'inline',
+      CreateBucketConfiguration: {
+        LocationConstraint: 'ap-south-1',
+      },
+    };
+
+    // const paramsDelete = {
+    //   Bucket: this.AWS_S3_BUCKET,
+    //   Key: article.title,
+    // };
+
     await validationUserByEmail(article.user.email, req.user.email);
 
     try {
+
+      // await this.s3.deleteObject(paramsDelete, function (err, data) {
+      //   if (err) console.log(err, err.stack);
+      //   else console.log(data);
+      // });
+
+      let s3Response = await this.s3.upload(params).promise();
+      data.material = String(s3Response.Location)
+
       this.articleRepository.merge(article, data);
 
       return await this.articleRepository.save(article);
