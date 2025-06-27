@@ -17,6 +17,8 @@ export const ArticleMessagesHelper = {
   SUCCESS_ARTICLE: 'Artigo cadastrado com sucesso!',
   SUCCESS_UPDATE_ARTICLE: 'Artigo atualizado com sucesso!',
   NOT_FOUND_ARTICLE: 'Artigo não encontrado.',
+  FILE_TYPE_INVALID: 'Tipo de arquivo inválido. Por favor, envie um arquivo HTML.',
+  FILE_REQUIRED: 'É necessário enviar um arquivo HTML para o artigo.',
 };
 
 export const ContentMessagesHelper = {
