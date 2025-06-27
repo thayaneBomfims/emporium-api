@@ -13,6 +13,7 @@ import {
   UseGuards,
   UploadedFile,
   UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ArticleService } from './article.service';
@@ -20,7 +21,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { ReturnDto } from '../utils/return.dto';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
-import { ArticleMessagesHelper } from '../../helpers/messages.helper';
+import { ArticleMessagesHelper, MessagesHelper } from '../../helpers/messages.helper';
 
 @ApiTags('Article')
 @Controller('api/v1/article')
@@ -82,6 +83,14 @@ export class ArticleController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateArticleDto
   ): Promise<ReturnDto> {
+    if (!file) {
+      throw new BadRequestException(ArticleMessagesHelper.FILE_REQUIRED);
+    }
+    
+    if (file.mimetype !== 'text/html') {
+      throw new BadRequestException(ArticleMessagesHelper.FILE_TYPE_INVALID);
+    }
+    
     return <ReturnDto>{
       status: HttpStatus.CREATED,
       message: ArticleMessagesHelper.SUCCESS_ARTICLE,
@@ -98,6 +107,14 @@ export class ArticleController {
     @Body() body: UpdateArticleDto,
     @Req() req: any,
   ): Promise<ReturnDto> {
+    if (!file) {
+      throw new BadRequestException(ArticleMessagesHelper.FILE_REQUIRED);
+    }
+    
+    if (file.mimetype !== 'text/html') {
+      throw new BadRequestException(ArticleMessagesHelper.FILE_TYPE_INVALID);
+    }
+    
     return <ReturnDto>{
       status: HttpStatus.OK,
       message: ArticleMessagesHelper.SUCCESS_UPDATE_ARTICLE,
