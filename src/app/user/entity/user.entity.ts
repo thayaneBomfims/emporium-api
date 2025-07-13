@@ -64,6 +64,9 @@ export class UserEntity {
   @Column({ default: false })
   active: boolean;
 
+  @Column({ default: false })
+  admin: boolean;
+
   @Column()
   description: string;
 
@@ -96,6 +99,7 @@ export class UserEntity {
     this.facebook = user?.facebook;
     this.telegram = user?.telegram;
     this.active = user?.active;
+    this.admin = user?.admin;
     this.description = user?.description;
     this.topics = user?.topics;
     this.articles = user?.articles;

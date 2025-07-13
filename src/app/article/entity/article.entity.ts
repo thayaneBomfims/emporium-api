@@ -24,6 +24,9 @@ export class ArticleEntity {
   @Column('text')
   material: string;
 
+  @Column({ default: false })
+  active: boolean;
+
   @ManyToOne(() => ContentEntity, (articles) => ArticleEntity)
   content: ContentEntity;
 
@@ -46,6 +49,7 @@ export class ArticleEntity {
     this.material = article?.material;
     this.content = article?.content;
     this.user = article?.user;
+    this.active = article?.active;
     this.createdAt = article?.createdAt;
     this.updatedAt = article?.updatedAt;
     this.deletedAt = article?.deletedAt;

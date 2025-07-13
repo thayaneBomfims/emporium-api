@@ -57,6 +57,7 @@ export class UserService {
           'facebook',
           'telegram',
           'active',
+          'admin',
           'topics'
         ],
         where: conditions.where,
@@ -133,8 +134,10 @@ export class UserService {
     const user = await this.findOne({ where: { id: id } });
     await validationUserByEmail(user.email, req.user.email);
 
-    const topic = await this.topicService.findOne({ where: { id: data.topic } })
-    user.topics.push(topic)
+    if (data.topic) {
+      const topic = await this.topicService.findOne({ where: { id: data.topic } })
+      user.topics.push(topic)
+    }
 
     this.userRepository.merge(user, data);
     try {

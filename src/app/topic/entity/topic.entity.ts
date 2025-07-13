@@ -1,4 +1,3 @@
-import { UserEntity } from '../../user/entity/user.entity';
 import { TrailEntity } from '../../trail/entity/trail.entity';
 import {
   Column,

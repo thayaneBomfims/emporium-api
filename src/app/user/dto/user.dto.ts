@@ -93,4 +93,10 @@ export class UpdateUserDto {
    * @example true
    */
   active?: boolean
+
+  /**
+   * User active
+   * @example true
+   */
+  admin?: boolean
 }

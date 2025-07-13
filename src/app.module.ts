@@ -7,6 +7,7 @@ import { ContentModule } from './app/content/content.module';
 import { UserModule } from './app/user/user.module';
 import { ArticleModule } from './app/article/article.module';
 import { AuthModule } from './auth/auth.module';
+import { SearchModule } from './app/search/search.module';
 
 @Module({
   imports: [
@@ -15,16 +16,16 @@ import { AuthModule } from './auth/auth.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
-        ({
-          type: process.env.TYPEORM_CONNECTION,
-          host: configService.get('DB_HOST', 'localhost'),
-          port: Number(configService.get('DB_PORT', 5432)),
-          username: configService.get('DB_USERNAME', 'postgres'),
-          password: configService.get('DB_PASSWORD', '123'),
-          database: configService.get('DB_DATABASE', 'emporium'),
-          entities: [__dirname + '/**/*.entity{.js,.ts}'],
-          synchronize: true,
-        } as TypeOrmModuleOptions),
+      ({
+        type: process.env.TYPEORM_CONNECTION,
+        host: configService.get('DB_HOST', 'localhost'),
+        port: Number(configService.get('DB_PORT', 5432)),
+        username: configService.get('DB_USERNAME', 'postgres'),
+        password: configService.get('DB_PASSWORD', '123'),
+        database: configService.get('DB_DATABASE', 'emporium'),
+        entities: [__dirname + '/**/*.entity{.js,.ts}'],
+        synchronize: true,
+      } as TypeOrmModuleOptions),
     }),
     TopicModule,
     TrailModule,
@@ -32,9 +33,10 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     ArticleModule,
     AuthModule,
+    SearchModule,
   ],
 
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

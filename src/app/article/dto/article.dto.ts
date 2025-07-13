@@ -54,4 +54,10 @@ export class UpdateArticleDto {
    * @example https://bucket.s3.amazonaws.com/article.json
    */
   material: string;
+
+  /**
+   * User active
+   * @example true
+   */
+  active?: boolean
 }
