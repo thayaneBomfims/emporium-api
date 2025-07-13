@@ -17,7 +17,7 @@ import { SearchModule } from './app/search/search.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
       ({
-        type: process.env.TYPEORM_CONNECTION,
+        type: process.env.TYPEORM_CONNECTION as any,
         host: configService.get('DB_HOST', 'localhost'),
         port: Number(configService.get('DB_PORT', 5432)),
         username: configService.get('DB_USERNAME', 'postgres'),
@@ -25,6 +25,9 @@ import { SearchModule } from './app/search/search.module';
         database: configService.get('DB_DATABASE', 'emporium'),
         entities: [__dirname + '/**/*.entity{.js,.ts}'],
         synchronize: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       } as TypeOrmModuleOptions),
     }),
     TopicModule,
