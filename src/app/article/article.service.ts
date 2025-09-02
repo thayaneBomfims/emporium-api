@@ -161,6 +161,17 @@ export class ArticleService {
     data: CreateArticleDto
   ): Promise<ArticleEntity> {
     const { originalname } = file;
+    
+    // Double check file type validation in service layer
+    if (!file || file.mimetype !== 'text/html') {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: ArticleMessagesHelper.FILE_TYPE_INVALID,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const params = {
       Bucket: this.AWS_S3_BUCKET,
@@ -185,13 +196,40 @@ export class ArticleService {
 
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: MessagesHelper.INTERNAL_SERVER_ERROR,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      // More specific error handling for file upload failures
+      if (error.code === 'NoSuchBucket') {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'Bucket de armazenamento não encontrado. Contate o administrador.',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      } else if (error.code === 'AccessDenied') {
+        throw new HttpException(
+          {
+            status: HttpStatus.FORBIDDEN,
+            error: 'Acesso negado ao bucket de armazenamento. Contate o administrador.',
+          },
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (error.code === 'NetworkingError') {
+        throw new HttpException(
+          {
+            status: HttpStatus.SERVICE_UNAVAILABLE,
+            error: 'Erro de conexão com o serviço de armazenamento. Tente novamente mais tarde.',
+          },
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: MessagesHelper.INTERNAL_SERVER_ERROR,
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -204,6 +242,17 @@ export class ArticleService {
     const article = await this.findOne({ where: { id: id } });
 
     const { originalname } = file;
+    
+    // Double check file type validation in service layer
+    if (!file || file.mimetype !== 'text/html') {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: ArticleMessagesHelper.FILE_TYPE_INVALID,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const params = {
       Bucket: this.AWS_S3_BUCKET,
@@ -238,13 +287,40 @@ export class ArticleService {
 
       return await this.articleRepository.save(article);
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: MessagesHelper.INTERNAL_SERVER_ERROR,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      // More specific error handling for file upload failures
+      if (error.code === 'NoSuchBucket') {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'Bucket de armazenamento não encontrado. Contate o administrador.',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      } else if (error.code === 'AccessDenied') {
+        throw new HttpException(
+          {
+            status: HttpStatus.FORBIDDEN,
+            error: 'Acesso negado ao bucket de armazenamento. Contate o administrador.',
+          },
+          HttpStatus.FORBIDDEN,
+        );
+      } else if (error.code === 'NetworkingError') {
+        throw new HttpException(
+          {
+            status: HttpStatus.SERVICE_UNAVAILABLE,
+            error: 'Erro de conexão com o serviço de armazenamento. Tente novamente mais tarde.',
+          },
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
+      } else {
+        throw new HttpException(
+          {
+            status: HttpStatus.INTERNAL_SERVER_ERROR,
+            error: MessagesHelper.INTERNAL_SERVER_ERROR,
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
